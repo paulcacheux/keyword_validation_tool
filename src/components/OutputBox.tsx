@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { State } from '../state/types';
 import { Paper, makeStyles, Typography } from '@material-ui/core';
+import { DownloadButton } from './DownloadButton';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -22,14 +23,10 @@ export const OutputBox: React.FC = () => {
         }
     }
 
-    const data = 'data:text/plain;charset=utf-8,' + JSON.stringify(result);
-
     return (
         <Paper elevation={3} className={classes.root}>
             <Typography variant="h3">Output</Typography>
-            <a download="output.json" href={data}>
-                Download
-            </a>
+            <DownloadButton fileName="output.json" data={JSON.stringify(result)} />
         </Paper>
     );
 };
