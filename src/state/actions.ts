@@ -1,4 +1,4 @@
-import { UPLOAD_FILE_REQUEST, UPLOAD_FILE_SUCCESS, UPLOAD_FILE_ERROR } from './types';
+import { UPLOAD_FILE_REQUEST, UPLOAD_FILE_SUCCESS, UPLOAD_FILE_ERROR, CHANGE_RECORD_KEPT_STATE } from './types';
 import { FileContent } from '../fileUpload';
 
 export interface UploadFileRequestAction {
@@ -16,7 +16,17 @@ interface UploadFileErrorAction {
     error: string;
 }
 
-export type RootAction = UploadFileRequestAction | UploadFileSuccessAction | UploadFileErrorAction;
+interface ChangeRecordKeptStateAction {
+    type: typeof CHANGE_RECORD_KEPT_STATE;
+    word: string;
+    kept?: boolean;
+}
+
+export type RootAction =
+    | UploadFileRequestAction
+    | UploadFileSuccessAction
+    | UploadFileErrorAction
+    | ChangeRecordKeptStateAction;
 
 export const uploadFileRequest = (blob: Blob): UploadFileRequestAction => {
     return {
@@ -36,5 +46,13 @@ export const uploadFileError = (error: string): UploadFileErrorAction => {
     return {
         type: UPLOAD_FILE_ERROR,
         error,
+    };
+};
+
+export const changeRecordKeptState = (word: string, kept?: boolean): ChangeRecordKeptStateAction => {
+    return {
+        type: CHANGE_RECORD_KEPT_STATE,
+        word,
+        kept,
     };
 };

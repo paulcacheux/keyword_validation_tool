@@ -11,9 +11,10 @@ import {
     Button,
     withStyles,
 } from '@material-ui/core';
-import { green, red } from '@material-ui/core/colors';
-import { useSelector } from 'react-redux';
-import { State } from '../state/types';
+import { green, red, yellow } from '@material-ui/core/colors';
+import { useSelector, useDispatch } from 'react-redux';
+import { State, WordInfo } from '../state/types';
+import { changeRecordKeptState } from '../state/actions';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -27,6 +28,12 @@ const useStyles = makeStyles(theme => ({
     },
     headCell: {
         color: theme.palette.common.white,
+    },
+    keptRow: {
+        backgroundColor: theme.palette.success.light,
+    },
+    removeRow: {
+        backgroundColor: theme.palette.error.light,
     },
 }));
 
@@ -51,6 +58,75 @@ const RedButton = withStyles(theme => ({
     },
 }))(Button);
 
+const YellowButton = withStyles(theme => ({
+    root: {
+        color: theme.palette.getContrastText(yellow[500]),
+        backgroundColor: yellow[500],
+        '&:hover': {
+            backgroundColor: yellow[700],
+        },
+    },
+}))(Button);
+
+interface ScoringRowProps {
+    word: string;
+    info: WordInfo;
+}
+
+export const ScoringRow: React.FC<ScoringRowProps> = ({ word, info }) => {
+    const classes = useStyles();
+    const dispatch = useDispatch();
+
+    const handleOk = (): void => {
+        dispatch(changeRecordKeptState(word, true));
+    };
+
+    const handleReject = (): void => {
+        dispatch(changeRecordKeptState(word, false));
+    };
+
+    const handleRestore = (): void => {
+        dispatch(changeRecordKeptState(word, undefined));
+    };
+
+    let buttons = null;
+    if (info.kept === undefined) {
+        buttons = (
+            <>
+                <GreenButton variant="contained" onClick={handleOk}>
+                    OK
+                </GreenButton>
+                <RedButton variant="contained" onClick={handleReject}>
+                    Reject
+                </RedButton>
+            </>
+        );
+    } else {
+        buttons = (
+            <>
+                <YellowButton variant="contained" onClick={handleRestore}>
+                    Restore
+                </YellowButton>
+            </>
+        );
+    }
+
+    let classRow = '';
+    if (info.kept === true) {
+        classRow = classes.keptRow;
+    } else if (info.kept === false) {
+        classRow = classes.removeRow;
+    }
+
+    return (
+        <TableRow className={classRow}>
+            <TableCell align="left">{word}</TableCell>
+            <TableCell align="right">{info.score}</TableCell>
+            <TableCell align="right">{buttons}</TableCell>
+        </TableRow>
+    );
+};
+
 export const ScoringTable: React.FC = () => {
     const classes = useStyles();
     const content = useSelector((state: State) => state.words);
@@ -71,16 +147,7 @@ export const ScoringTable: React.FC = () => {
                 </TableHead>
                 <TableBody>
                     {Object.keys(content).map(word => {
-                        return (
-                            <TableRow key={word}>
-                                <TableCell align="left">{word}</TableCell>
-                                <TableCell align="right">{content[word]}</TableCell>
-                                <TableCell align="right">
-                                    <GreenButton variant="contained">OK</GreenButton>
-                                    <RedButton variant="contained">Reject</RedButton>
-                                </TableCell>
-                            </TableRow>
-                        );
+                        return <ScoringRow key={word} word={word} info={content[word]} />;
                     })}
                 </TableBody>
             </Table>
