@@ -1,5 +1,6 @@
 {
     "name": "keyword_validation_tool",
+    "homepage": "https://paulcacheux.github.io/keyword_validation_tool",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
