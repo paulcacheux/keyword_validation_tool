@@ -23,7 +23,7 @@ export const App: React.FC = () => {
             <AppBar position="sticky">
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
-                        Samuel Data Analysis
+                        Keyword Validation Tool
                     </Typography>
                 </Toolbar>
             </AppBar>
