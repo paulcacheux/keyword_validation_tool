@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, Container, CssBaseline } from '@material-u
 import { makeStyles } from '@material-ui/core/styles';
 import { FileUploadBox } from './components/FileUploadBox';
 import { ScoringTable } from './components/ScoringTable';
+import { OutputBox } from './components/OutputBox';
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -30,6 +31,7 @@ export const App: React.FC = () => {
             <Container fixed className={classes.container}>
                 <FileUploadBox />
                 <ScoringTable />
+                <OutputBox />
             </Container>
         </React.Fragment>
     );
