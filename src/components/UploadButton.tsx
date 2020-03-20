@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles, Button } from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { readAsText } from '../fileUpload';
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -15,19 +16,11 @@ export const UploadButton: React.FC = () => {
     const classes = useStyles();
     const [content, setContent] = useState('');
 
-    const fileReader: FileReader = new FileReader();
-    const handleFileRead = (): void => {
-        const content = fileReader.result;
-        if (typeof content === 'string') {
-            setContent(content);
-        }
-    };
-    fileReader.onloadend = handleFileRead;
-
-    const handleFileInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const handleFileInput = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
         const files = event.target.files;
         if (files) {
-            fileReader.readAsText(files[0]);
+            const fileContent = await readAsText(files[0]);
+            setContent(fileContent);
         }
     };
 
