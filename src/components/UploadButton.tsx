@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles, Button } from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import { readAsText } from '../fileUpload';
+import { useDispatch } from 'react-redux';
+import { uploadFileRequest } from '../state/actions';
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -14,13 +15,12 @@ const useStyles = makeStyles(theme => ({
 
 export const UploadButton: React.FC = () => {
     const classes = useStyles();
-    const [content, setContent] = useState('');
+    const dispatch = useDispatch();
 
     const handleFileInput = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
         const files = event.target.files;
         if (files) {
-            const fileContent = await readAsText(files[0]);
-            setContent(fileContent);
+            dispatch(uploadFileRequest(files[0]));
         }
     };
 
@@ -36,7 +36,6 @@ export const UploadButton: React.FC = () => {
                 Upload
                 <input type="file" className={classes.fileInput} onChange={handleFileInput} />
             </Button>
-            <pre>{content}</pre>
         </>
     );
 };

@@ -12,6 +12,8 @@ import {
     withStyles,
 } from '@material-ui/core';
 import { green, red } from '@material-ui/core/colors';
+import { useSelector } from 'react-redux';
+import { State } from '../state/types';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,6 +53,7 @@ const RedButton = withStyles(theme => ({
 
 export const ScoringTable: React.FC = () => {
     const classes = useStyles();
+    const content = useSelector((state: State) => state.words);
 
     return (
         <TableContainer component={Paper} className={classes.root} elevation={3}>
@@ -67,14 +70,18 @@ export const ScoringTable: React.FC = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    <TableRow>
-                        <TableCell align="left">Test</TableCell>
-                        <TableCell align="right">0.82</TableCell>
-                        <TableCell align="right">
-                            <GreenButton variant="contained">OK</GreenButton>
-                            <RedButton variant="contained">Reject</RedButton>
-                        </TableCell>
-                    </TableRow>
+                    {Object.keys(content).map(word => {
+                        return (
+                            <TableRow key={word}>
+                                <TableCell align="left">{word}</TableCell>
+                                <TableCell align="right">{content[word]}</TableCell>
+                                <TableCell align="right">
+                                    <GreenButton variant="contained">OK</GreenButton>
+                                    <RedButton variant="contained">Reject</RedButton>
+                                </TableCell>
+                            </TableRow>
+                        );
+                    })}
                 </TableBody>
             </Table>
         </TableContainer>
