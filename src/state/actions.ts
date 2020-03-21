@@ -1,20 +1,28 @@
-import { UPLOAD_FILE_REQUEST, UPLOAD_FILE_SUCCESS, UPLOAD_FILE_ERROR, CHANGE_RECORD_KEPT_STATE } from './types';
-import { FileContent } from '../fileUpload';
+import { UPLOAD_FILE, CHANGE_RECORD_KEPT_STATE } from './types';
+import { FileContent, readAsText } from '../fileUpload';
+import { State } from './types';
+import { ThunkAction } from 'redux-thunk';
 
-export interface UploadFileRequestAction {
-    type: typeof UPLOAD_FILE_REQUEST;
-    blob: Blob;
+export enum AsyncStatus {
+    SUCCESS,
+    ERROR,
 }
 
-interface UploadFileSuccessAction {
-    type: typeof UPLOAD_FILE_SUCCESS;
-    content: FileContent;
+interface AsyncSuccessAction<T, P> {
+    type: T;
+    status: AsyncStatus.SUCCESS;
+    payload: P;
 }
 
-interface UploadFileErrorAction {
-    type: typeof UPLOAD_FILE_ERROR;
+interface AsyncErrorAction<T> {
+    type: T;
+    status: AsyncStatus.ERROR;
     error: string;
 }
+
+export type AsyncAction<T, P> = AsyncSuccessAction<T, P> | AsyncErrorAction<T>;
+
+export type UploadFileAction = AsyncAction<typeof UPLOAD_FILE, FileContent>;
 
 interface ChangeRecordKeptStateAction {
     type: typeof CHANGE_RECORD_KEPT_STATE;
@@ -22,30 +30,34 @@ interface ChangeRecordKeptStateAction {
     kept?: boolean;
 }
 
-export type RootAction =
-    | UploadFileRequestAction
-    | UploadFileSuccessAction
-    | UploadFileErrorAction
-    | ChangeRecordKeptStateAction;
+export type RootAction = UploadFileAction | ChangeRecordKeptStateAction;
 
-export const uploadFileRequest = (blob: Blob): UploadFileRequestAction => {
+type ThunkResult<R> = ThunkAction<R, State, undefined, RootAction>;
+
+export const uploadFileSuccess = (content: FileContent): UploadFileAction => {
     return {
-        type: UPLOAD_FILE_REQUEST,
-        blob,
+        type: UPLOAD_FILE,
+        status: AsyncStatus.SUCCESS,
+        payload: content,
     };
 };
 
-export const uploadFileSuccess = (content: FileContent): UploadFileSuccessAction => {
+export const uploadFileError = (error: string): UploadFileAction => {
     return {
-        type: UPLOAD_FILE_SUCCESS,
-        content,
-    };
-};
-
-export const uploadFileError = (error: string): UploadFileErrorAction => {
-    return {
-        type: UPLOAD_FILE_ERROR,
+        type: UPLOAD_FILE,
+        status: AsyncStatus.ERROR,
         error,
+    };
+};
+
+export const uploadFileRequest = (blob: Blob): ThunkResult<Promise<void>> => {
+    return async (dispatch): Promise<void> => {
+        try {
+            const content = await readAsText(blob);
+            dispatch(uploadFileSuccess(content));
+        } catch (error) {
+            dispatch(uploadFileError(error));
+        }
     };
 };
 

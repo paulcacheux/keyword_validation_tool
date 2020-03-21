@@ -1,5 +1,5 @@
-import { UPLOAD_FILE_SUCCESS, UPLOAD_FILE_ERROR, State, CHANGE_RECORD_KEPT_STATE } from './types';
-import { RootAction } from './actions';
+import { UPLOAD_FILE, State, CHANGE_RECORD_KEPT_STATE } from './types';
+import { RootAction, AsyncStatus } from './actions';
 import { FileContent } from '../fileUpload';
 
 const defaultState: State = {
@@ -17,10 +17,15 @@ export const parsedContentToWords = (content: FileContent): State['words'] => {
 
 export const reducer = (state = defaultState, action: RootAction): State => {
     switch (action.type) {
-        case UPLOAD_FILE_SUCCESS:
-            return { words: parsedContentToWords(action.content), error: undefined };
-        case UPLOAD_FILE_ERROR:
-            return { words: {}, error: action.error };
+        case UPLOAD_FILE:
+            switch (action.status) {
+                case AsyncStatus.SUCCESS:
+                    return { words: parsedContentToWords(action.payload), error: undefined };
+                case AsyncStatus.ERROR:
+                    return { words: {}, error: action.error };
+                default:
+                    return state;
+            }
         case CHANGE_RECORD_KEPT_STATE:
             const newWords = { ...state.words };
             newWords[action.word].kept = action.kept;

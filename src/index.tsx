@@ -2,16 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './App';
 import * as serviceWorker from './serviceWorker';
-import { fileUploadSaga } from './state/sagas';
 import { reducer } from './state/reducers';
-import createSagaMiddleware from 'redux-saga';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 
-const sagaMiddleware = createSagaMiddleware();
-const store = createStore(reducer, composeWithDevTools(applyMiddleware(sagaMiddleware)));
-sagaMiddleware.run(fileUploadSaga);
+const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
 
 ReactDOM.render(
     <Provider store={store}>
