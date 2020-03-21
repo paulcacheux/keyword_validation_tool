@@ -1,9 +1,10 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Container, CssBaseline } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { FileUploadBox } from './components/FileUploadBox';
-import { ScoringTable } from './components/ScoringTable';
-import { OutputBox } from './components/OutputBox';
+import { ManualPage } from './ManualPage';
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
+import { DocumentList } from './DocumentList';
+import { RemotePage } from './RemotePage';
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -29,9 +30,19 @@ export const App: React.FC = () => {
                 </Toolbar>
             </AppBar>
             <Container fixed className={classes.container}>
-                <FileUploadBox />
-                <ScoringTable />
-                <OutputBox />
+                <Router>
+                    <Switch>
+                        <Route exact path="/">
+                            <DocumentList />
+                        </Route>
+                        <Route path="/manual">
+                            <ManualPage />
+                        </Route>
+                        <Route path="/:id">
+                            <RemotePage />
+                        </Route>
+                    </Switch>
+                </Router>
             </Container>
         </React.Fragment>
     );

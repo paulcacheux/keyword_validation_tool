@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles, Button } from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { useDispatch } from 'react-redux';
-import { uploadFileRequest } from '../state/actions';
+import { loadLocalFileRequest } from '../state/actions';
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -20,7 +20,7 @@ export const UploadButton: React.FC = () => {
     const handleFileInput = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
         const files = event.target.files;
         if (files) {
-            dispatch(uploadFileRequest(files[0]));
+            dispatch(loadLocalFileRequest(files[0]));
         }
     };
 

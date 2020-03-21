@@ -1,7 +1,8 @@
-import { UPLOAD_FILE, CHANGE_RECORD_KEPT_STATE } from './types';
+import { UPLOAD_FILE, CHANGE_RECORD_KEPT_STATE, FETCH_SOURCE_DOCUMENT } from './types';
 import { FileContent, readAsText } from '../fileUpload';
 import { State } from './types';
 import { ThunkAction } from 'redux-thunk';
+import { SourceDocumentData, fetchSourceDocument } from '../api';
 
 export enum AsyncStatus {
     SUCCESS,
@@ -23,6 +24,7 @@ interface AsyncErrorAction<T> {
 export type AsyncAction<T, P> = AsyncSuccessAction<T, P> | AsyncErrorAction<T>;
 
 export type UploadFileAction = AsyncAction<typeof UPLOAD_FILE, FileContent>;
+export type FetchSourceDocumentAction = AsyncAction<typeof FETCH_SOURCE_DOCUMENT, SourceDocumentData>;
 
 interface ChangeRecordKeptStateAction {
     type: typeof CHANGE_RECORD_KEPT_STATE;
@@ -30,33 +32,44 @@ interface ChangeRecordKeptStateAction {
     kept?: boolean;
 }
 
-export type RootAction = UploadFileAction | ChangeRecordKeptStateAction;
+export type RootAction = UploadFileAction | FetchSourceDocumentAction | ChangeRecordKeptStateAction;
 
 type ThunkResult<R> = ThunkAction<R, State, undefined, RootAction>;
 
-export const uploadFileSuccess = (content: FileContent): UploadFileAction => {
+const asyncSuccess = <T, P>(type: T, payload: P): AsyncAction<T, P> => {
     return {
-        type: UPLOAD_FILE,
+        type,
         status: AsyncStatus.SUCCESS,
-        payload: content,
+        payload,
     };
 };
 
-export const uploadFileError = (error: string): UploadFileAction => {
+const asyncError = <T, P>(type: T, error: string): AsyncAction<T, P> => {
     return {
-        type: UPLOAD_FILE,
+        type,
         status: AsyncStatus.ERROR,
         error,
     };
 };
 
-export const uploadFileRequest = (blob: Blob): ThunkResult<Promise<void>> => {
+export const loadLocalFileRequest = (blob: Blob): ThunkResult<Promise<void>> => {
     return async (dispatch): Promise<void> => {
         try {
             const content = await readAsText(blob);
-            dispatch(uploadFileSuccess(content));
+            dispatch(asyncSuccess(UPLOAD_FILE, content) as UploadFileAction);
         } catch (error) {
-            dispatch(uploadFileError(error));
+            dispatch(asyncError(UPLOAD_FILE, error) as UploadFileAction);
+        }
+    };
+};
+
+export const fetchRemoteFile = (id: number): ThunkResult<Promise<void>> => {
+    return async (dispatch): Promise<void> => {
+        try {
+            const content = await fetchSourceDocument(id);
+            dispatch(asyncSuccess(FETCH_SOURCE_DOCUMENT, content) as FetchSourceDocumentAction);
+        } catch (error) {
+            dispatch(asyncError(FETCH_SOURCE_DOCUMENT, error) as FetchSourceDocumentAction);
         }
     };
 };
