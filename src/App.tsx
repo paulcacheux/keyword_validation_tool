@@ -30,7 +30,7 @@ export const App: React.FC = () => {
                 </Toolbar>
             </AppBar>
             <Container fixed className={classes.container}>
-                <Router>
+                <Router basename="/keyword_validation_tool">
                     <Switch>
                         <Route exact path="/">
                             <DocumentList />
