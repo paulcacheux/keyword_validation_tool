@@ -33,10 +33,10 @@ export const App: React.FC = () => {
                 <Router basename="/keyword_validation_tool">
                     <Switch>
                         <Route exact path="/">
-                            <DocumentList />
-                        </Route>
-                        <Route path="/manual">
                             <ManualPage />
+                        </Route>
+                        <Route path="/manage">
+                            <DocumentList />
                         </Route>
                         <Route path="/:id">
                             <RemotePage />

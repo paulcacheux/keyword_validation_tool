@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { SourceDocumentList, fetchSourceDocumentList } from './api';
 import { Alert } from '@material-ui/lab';
-import { Card, Typography, CardContent, Grid, makeStyles, Button, CardActions } from '@material-ui/core';
+import {
+    Card,
+    Typography,
+    CardContent,
+    Grid,
+    makeStyles,
+    Button,
+    CardActions,
+    CircularProgress,
+} from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import { NavigationInfo } from './components/NavigationInfo';
 
 const useStyles = makeStyles(theme => ({
     gridContainer: {
@@ -10,10 +20,9 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export const DocumentList: React.FC = () => {
-    const classes = useStyles();
-
+const useDocumentList = (): { documents: SourceDocumentList; isLoading: boolean; error?: string } => {
     const [documents, setDocuments] = useState<SourceDocumentList>([]);
+    const [isLoading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -21,6 +30,7 @@ export const DocumentList: React.FC = () => {
 
         async function fetcher(): Promise<void> {
             try {
+                setLoading(true);
                 const list = await fetchSourceDocumentList(controller);
                 setDocuments(list);
                 setError(null);
@@ -30,6 +40,7 @@ export const DocumentList: React.FC = () => {
                     setDocuments([]);
                 }
             }
+            setLoading(false);
         }
 
         fetcher();
@@ -39,13 +50,22 @@ export const DocumentList: React.FC = () => {
         };
     }, []);
 
+    return { documents, isLoading, error: error || undefined };
+};
+
+export const DocumentList: React.FC = () => {
+    const classes = useStyles();
+    const { documents, isLoading, error } = useDocumentList();
+
     return (
         <>
+            <NavigationInfo path="manage" />
             {error && <Alert severity="error">{error}</Alert>}
             <Button color="secondary" variant="contained" component={Link} to="/manual">
                 Manual
             </Button>
             <Grid container spacing={2} className={classes.gridContainer}>
+                {isLoading && <CircularProgress />}
                 {documents.map((doc, index) => (
                     <Grid item xs={12} sm={4} lg={3} key={index}>
                         <Card elevation={3}>
