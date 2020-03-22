@@ -22,15 +22,13 @@ jobs:
               with:
                   cmd: build
 
+            - name: Fix 404 error
+              run: |
+                  cp ./build/index.html ./build/404.html
+
             - name: Deploy
               uses: JamesIves/github-pages-deploy-action@releases/v3
               with:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   BRANCH: gh-pages
                   FOLDER: build
-
-            - name: Fix 404 error
-              uses: canastro/copy-file-action@master
-              with:
-                  source: 'index.html'
-                  target: '404.html'
