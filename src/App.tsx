@@ -2,7 +2,7 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, Container, CssBaseline } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ManualPage } from './ManualPage';
-import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
+import { Switch, Route, HashRouter as Router } from 'react-router-dom';
 import { DocumentList } from './DocumentList';
 import { RemotePage } from './RemotePage';
 
@@ -30,7 +30,7 @@ export const App: React.FC = () => {
                 </Toolbar>
             </AppBar>
             <Container fixed className={classes.container}>
-                <Router basename={process.env.PUBLIC_URL}>
+                <Router basename="/">
                     <Switch>
                         <Route exact path="/">
                             <ManualPage />
