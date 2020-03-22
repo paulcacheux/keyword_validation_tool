@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/keyword_validation_tool/static/js/main.2ea5238a.chunk.js",
-    "main.js.map": "/keyword_validation_tool/static/js/main.2ea5238a.chunk.js.map",
+    "main.js": "/keyword_validation_tool/static/js/main.38792f46.chunk.js",
+    "main.js.map": "/keyword_validation_tool/static/js/main.38792f46.chunk.js.map",
     "runtime-main.js": "/keyword_validation_tool/static/js/runtime-main.536ff590.js",
     "runtime-main.js.map": "/keyword_validation_tool/static/js/runtime-main.536ff590.js.map",
     "static/js/2.bf10b9b9.chunk.js": "/keyword_validation_tool/static/js/2.bf10b9b9.chunk.js",
     "static/js/2.bf10b9b9.chunk.js.map": "/keyword_validation_tool/static/js/2.bf10b9b9.chunk.js.map",
     "index.html": "/keyword_validation_tool/index.html",
-    "precache-manifest.f73b9736e1d72db6d808239ba7d60270.js": "/keyword_validation_tool/precache-manifest.f73b9736e1d72db6d808239ba7d60270.js",
+    "precache-manifest.fd258fd9c824c5121990b2b85f1bac72.js": "/keyword_validation_tool/precache-manifest.fd258fd9c824c5121990b2b85f1bac72.js",
     "service-worker.js": "/keyword_validation_tool/service-worker.js",
     "static/js/2.bf10b9b9.chunk.js.LICENSE.txt": "/keyword_validation_tool/static/js/2.bf10b9b9.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.536ff590.js",
     "static/js/2.bf10b9b9.chunk.js",
-    "static/js/main.2ea5238a.chunk.js"
+    "static/js/main.38792f46.chunk.js"
   ]
 }
