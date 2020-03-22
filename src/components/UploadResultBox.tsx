@@ -43,7 +43,6 @@ export const UploadResultBox: React.FC<{ id: number }> = ({ id }) => {
 
     const handleClick = async (): Promise<void> => {
         try {
-            console.log(id, resultDocument);
             await uploadResultDocument(id, resultDocument);
             setSuccesMsg('Successfully published document');
             setErrorMsg(null);
