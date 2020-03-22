@@ -1,4 +1,5 @@
-const BASE_PATH = 'http://localhost:5000';
+// const BASE_PATH = 'http://localhost:5000';
+const BASE_PATH = 'https://keyword-validation-tool.herokuapp.com';
 
 export type SourceDocumentList = Array<{ id: number; name: string }>;
 
