@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export const OutputBox: React.FC = () => {
+export const DownloadBox: React.FC = () => {
     const classes = useStyles();
     const content = useSelector((state: State) => state.words);
 

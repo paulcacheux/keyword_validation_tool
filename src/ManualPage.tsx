@@ -1,14 +1,16 @@
 import React from 'react';
 import { FileUploadBox } from './components/FileUploadBox';
 import { ScoringTable } from './components/ScoringTable';
-import { OutputBox } from './components/OutputBox';
+import { DownloadBox } from './components/DownloadBox';
+import { NavigationInfo } from './components/NavigationInfo';
 
 export const ManualPage: React.FC = () => {
     return (
         <>
+            <NavigationInfo path="manual" />
             <FileUploadBox />
-            <ScoringTable />
-            <OutputBox />
+            <ScoringTable canBeEmpty />
+            <DownloadBox />
         </>
     );
 };

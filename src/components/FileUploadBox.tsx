@@ -1,9 +1,10 @@
 import React from 'react';
 import { Paper, Typography, makeStyles } from '@material-ui/core';
-import { UploadButton } from './UploadButton';
+import { UploadButton } from './FileUploadButton';
 
 const useStyles = makeStyles(theme => ({
     root: {
+        marginTop: theme.spacing(2),
         padding: theme.spacing(2),
     },
 }));

@@ -36,6 +36,9 @@ const useStyles = makeStyles(theme => ({
     removeRow: {
         backgroundColor: theme.palette.error.light,
     },
+    buttonBox: {
+        width: '30vh',
+    },
 }));
 
 const GreenButton = withStyles(theme => ({
@@ -123,12 +126,14 @@ export const ScoringRow: React.FC<ScoringRowProps> = ({ word, info }) => {
         <TableRow className={classRow}>
             <TableCell align="left">{word}</TableCell>
             <TableCell align="right">{info.score}</TableCell>
-            <TableCell align="right">{buttons}</TableCell>
+            <TableCell align="right" className={classes.buttonBox}>
+                {buttons}
+            </TableCell>
         </TableRow>
     );
 };
 
-export const ScoringTable: React.FC = () => {
+export const ScoringTable: React.FC<{ canBeEmpty?: boolean }> = ({ canBeEmpty }) => {
     const classes = useStyles();
     const content = useSelector((state: State) => state.words);
 
@@ -152,7 +157,7 @@ export const ScoringTable: React.FC = () => {
                     })}
                 </TableBody>
             </Table>
-            {Object.keys(content).length === 0 && <CircularProgress />}
+            {!canBeEmpty && Object.keys(content).length === 0 && <CircularProgress />}
         </TableContainer>
     );
 };
