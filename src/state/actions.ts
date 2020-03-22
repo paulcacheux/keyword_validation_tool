@@ -1,4 +1,4 @@
-import { UPLOAD_FILE, CHANGE_RECORD_KEPT_STATE, FETCH_SOURCE_DOCUMENT } from './types';
+import { LOAD_LOCAL_FILE, CHANGE_RECORD_KEPT_STATE, FETCH_SOURCE_DOCUMENT, CLEAN_STATE_WORDS } from './types';
 import { FileContent, readAsText } from '../fileUpload';
 import { State } from './types';
 import { ThunkAction } from 'redux-thunk';
@@ -23,8 +23,12 @@ interface AsyncErrorAction<T> {
 
 export type AsyncAction<T, P> = AsyncSuccessAction<T, P> | AsyncErrorAction<T>;
 
-export type UploadFileAction = AsyncAction<typeof UPLOAD_FILE, FileContent>;
+export type UploadFileAction = AsyncAction<typeof LOAD_LOCAL_FILE, FileContent>;
 export type FetchSourceDocumentAction = AsyncAction<typeof FETCH_SOURCE_DOCUMENT, SourceDocumentData>;
+
+interface CleanStateWords {
+    type: typeof CLEAN_STATE_WORDS;
+}
 
 interface ChangeRecordKeptStateAction {
     type: typeof CHANGE_RECORD_KEPT_STATE;
@@ -32,7 +36,7 @@ interface ChangeRecordKeptStateAction {
     kept?: boolean;
 }
 
-export type RootAction = UploadFileAction | FetchSourceDocumentAction | ChangeRecordKeptStateAction;
+export type RootAction = UploadFileAction | FetchSourceDocumentAction | ChangeRecordKeptStateAction | CleanStateWords;
 
 type ThunkResult<R> = ThunkAction<R, State, undefined, RootAction>;
 
@@ -55,10 +59,11 @@ const asyncError = <T, P>(type: T, error: string): AsyncAction<T, P> => {
 export const loadLocalFileRequest = (blob: Blob): ThunkResult<Promise<void>> => {
     return async (dispatch): Promise<void> => {
         try {
+            dispatch({ type: CLEAN_STATE_WORDS });
             const content = await readAsText(blob);
-            dispatch(asyncSuccess(UPLOAD_FILE, content) as UploadFileAction);
+            dispatch(asyncSuccess(LOAD_LOCAL_FILE, content) as UploadFileAction);
         } catch (error) {
-            dispatch(asyncError(UPLOAD_FILE, error) as UploadFileAction);
+            dispatch(asyncError(LOAD_LOCAL_FILE, error) as UploadFileAction);
         }
     };
 };
@@ -66,6 +71,7 @@ export const loadLocalFileRequest = (blob: Blob): ThunkResult<Promise<void>> => 
 export const fetchRemoteFile = (id: number): ThunkResult<Promise<void>> => {
     return async (dispatch): Promise<void> => {
         try {
+            dispatch({ type: CLEAN_STATE_WORDS });
             const content = await fetchSourceDocument(id);
             dispatch(asyncSuccess(FETCH_SOURCE_DOCUMENT, content) as FetchSourceDocumentAction);
         } catch (error) {

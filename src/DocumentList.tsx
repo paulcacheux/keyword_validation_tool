@@ -17,18 +17,26 @@ export const DocumentList: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        const controller = new AbortController();
+
         async function fetcher(): Promise<void> {
             try {
-                const list = await fetchSourceDocumentList();
+                const list = await fetchSourceDocumentList(controller);
                 setDocuments(list);
                 setError(null);
             } catch (error) {
-                setError(error.message);
-                setDocuments([]);
+                if (error.name !== 'AbortError') {
+                    setError(error.message);
+                    setDocuments([]);
+                }
             }
         }
 
         fetcher();
+
+        return (): void => {
+            controller.abort();
+        };
     }, []);
 
     return (

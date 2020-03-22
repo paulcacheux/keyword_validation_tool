@@ -1,4 +1,5 @@
-export const UPLOAD_FILE = 'UPLOAD_FILE';
+export const CLEAN_STATE_WORDS = 'CLEAN_STATE_WORDS';
+export const LOAD_LOCAL_FILE = 'LOAD_LOCAL_FILE';
 export const CHANGE_RECORD_KEPT_STATE = 'CHANGE_RECORD_KEPT_STATE';
 export const FETCH_SOURCE_DOCUMENT = 'FETCH_SOURCE_DOCUMENT';
 
@@ -8,6 +9,7 @@ export interface WordInfo {
 }
 
 export interface State {
+    currentFileName?: string;
     words: {
         [word: string]: WordInfo;
     };

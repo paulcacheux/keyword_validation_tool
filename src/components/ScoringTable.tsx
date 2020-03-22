@@ -10,6 +10,7 @@ import {
     makeStyles,
     Button,
     withStyles,
+    CircularProgress,
 } from '@material-ui/core';
 import { green, red, yellow } from '@material-ui/core/colors';
 import { useSelector, useDispatch } from 'react-redux';
@@ -151,6 +152,7 @@ export const ScoringTable: React.FC = () => {
                     })}
                 </TableBody>
             </Table>
+            {Object.keys(content).length === 0 && <CircularProgress />}
         </TableContainer>
     );
 };
