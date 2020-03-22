@@ -61,7 +61,7 @@ export const DocumentList: React.FC = () => {
         <>
             <NavigationInfo path="manage" />
             {error && <Alert severity="error">{error}</Alert>}
-            <Button color="secondary" variant="contained" component={Link} to="/manual">
+            <Button color="secondary" variant="contained" component={Link} to="/">
                 Manual
             </Button>
             <Grid container spacing={2} className={classes.gridContainer}>
