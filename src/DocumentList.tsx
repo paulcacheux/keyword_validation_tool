@@ -73,6 +73,9 @@ export const DocumentList: React.FC = () => {
                                 <Typography variant="h5" component="h2">
                                     {doc.name}
                                 </Typography>
+                                <Typography color="textSecondary">
+                                    {doc.result_count} result document{doc.result_count === 1 ? '' : 's'}
+                                </Typography>
                             </CardContent>
                             <CardActions>
                                 <Button

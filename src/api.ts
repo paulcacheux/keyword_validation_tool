@@ -1,7 +1,7 @@
 // const BASE_PATH = 'http://localhost:5000';
 const BASE_PATH = 'https://keyword-validation-tool.herokuapp.com';
 
-export type SourceDocumentList = Array<{ id: number; name: string }>;
+export type SourceDocumentList = Array<{ id: number; name: string; result_count: number }>;
 
 export const fetchSourceDocumentList = async (controller?: AbortController): Promise<SourceDocumentList> => {
     const response = await fetch(BASE_PATH + '/', { signal: controller?.signal });
