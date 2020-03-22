@@ -28,3 +28,9 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   BRANCH: gh-pages
                   FOLDER: build
+
+            - name: Fix 404 error
+              uses: canastro/copy-file-action@master
+              with:
+                  source: 'index.html'
+                  target: '404.html'
